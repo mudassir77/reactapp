@@ -1,11 +1,9 @@
 import logo from './logo.svg';
 import React from 'react';
-
 import './App.css';
 import Counters from './components/counters'
 import NavBar from './components/Navbar';
 import intitalCount from "./components/check";
-
 
 
 class App extends React.Component {
@@ -19,6 +17,13 @@ class App extends React.Component {
 
     ]
   }
+  componentDidMount() {
+    console.log("Componentdid monunt ")
+  }
+  componentDidUpdate(prevProps, prevState) {
+    console.log("Componentdid update ", prevProps, prevState)
+  }
+
   handleDelete = (counterId) => {
     console.log("event handler called", counterId)
     const counters = this.state.counters.filter((count) => count.id !== counterId)
@@ -26,25 +31,22 @@ class App extends React.Component {
 
   }
   addNewObject = () => {
-
-    //  const counters = this.state.counters.push({id : 5, value : 0})
-    //  this.setState({counters})
     let cloneState = { ...this.state };
-    console.log(cloneState.counters.length, "**********************clone")
-
+    // console.log(cloneState.counters.length, "**********************clone")
     cloneState.counters.push({ id: (cloneState.counters.length + 1), value: 0 })
     this.setState(cloneState)
 
   }
+
+
   resetCounters = () => {
-    // const {intitalCount} = intitalCount
 
     let countt = intitalCount.intitalCount
-    // console.log(countt,"********************count")
-
     const counters = this.state.counters.filter((count) => count.id <= countt)
     this.setState({ counters })
   }
+
+
   deleteLastObject = () => {
     let cloneState = { ...this.state };
     console.log(cloneState.counters.length, "**********************clone")
@@ -53,6 +55,8 @@ class App extends React.Component {
     this.setState(cloneState)
 
   }
+
+
   onSingleReset = (count) => {
     let cloneState = { ...this.state }
     cloneState.counters = cloneState.counters.map((eachCounter) => {
@@ -64,6 +68,8 @@ class App extends React.Component {
     })
     this.setState(cloneState)
   }
+
+
   handleIncrementCount = counter => {
     const counters = [...this.state.counters]
     let index = counters.indexOf(counter)
@@ -71,6 +77,19 @@ class App extends React.Component {
     counters[index].value++
     this.setState({ counters })
     console.log(counter, "counter***********")
+
+  }
+
+
+  handleDecrement = counter => {
+    if (counter.value > 0) {
+      const counters = [...this.state.counters]
+      let index = counters.indexOf(counter)
+      counters[index] = { ...counter }
+      counters[index].value--
+      this.setState({ counters })
+      console.log("decrement")
+    }
 
 
   }
@@ -81,7 +100,8 @@ class App extends React.Component {
         <NavBar />
         <main className="container">
           <Counters counters={this.state.counters} onReset={this.onSingleReset} onIncrement={this.handleIncrementCount}
-            onDelete={this.handleDelete} onAddNewObject={this.addNewObject} onLastDelete={this.deleteLastObject} overallReset={this.resetCounters} />
+            onDelete={this.handleDelete} onDecrement={this.handleDecrement} onAddNewObject={this.addNewObject}
+            onLastDelete={this.deleteLastObject} overallReset={this.resetCounters} />
         </main>
       </React.Fragment>
     );
